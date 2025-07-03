@@ -16,11 +16,11 @@ def create_matricula(matricula: Matricula, db: Session = Depends(get_db)):
     if db_aluno is None or db_curso is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Aluno ou Curso não encontrado")
 
-    db_matricula = ModelMatricula(**matricula.dict())
+    db_matricula = ModelMatricula(**matricula.model_dump())
     db.add(db_matricula)
     db.commit()
     db.refresh(db_matricula)
-    return Matricula.from_orm(db_matricula)
+    return Matricula.model_validate(db_matricula)
 
 
 
